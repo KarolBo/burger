@@ -1,1 +1,3 @@
-export default props => props.children;
+const myAux = props => props.children;
+
+export default myAux;

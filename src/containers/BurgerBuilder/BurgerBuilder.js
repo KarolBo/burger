@@ -38,6 +38,10 @@ class BurgerBuilder extends Component {
         });
     }
 
+    purchaseContinueHandler = () => {
+        alert('siema eniu!');
+    }
+
     addIngredientHandler = (type) => {
         const updatedIngredients = {
             ...this.state.ingredients
@@ -85,7 +89,10 @@ class BurgerBuilder extends Component {
             <MyAux>
                 <Modal show={this.state.purchasing}
                        closing={this.purchaseCancelHandler}>
-                    <OrderSummary ingredients={this.state.ingredients} />
+                    <OrderSummary ingredients={this.state.ingredients}
+                                  continuing={this.purchaseContinueHandler}
+                                  closing={this.purchaseCancelHandler} 
+                                  price={this.state.totalPrice.toFixed(2)}/>
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls addHandler={this.addIngredientHandler}

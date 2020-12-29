@@ -11,14 +11,15 @@ const buildControls = (props) => {
     ];
 
     return (<div className={classes.BuildControls}>
-        <p>{`You're gonna pay ${props.price} $`}</p>
+        <p>{`You're gonna pay ${props.price.toFixed(2)} $`}</p>
         {controls.map( ctr => <BuildControl key={ctr.label} 
                                             label={ctr.label}
                                             addHandler={() => props.addHandler(ctr.type)}
                                             removeHandler={() => props.removeHandler(ctr.type)} 
                                             isDisabled={props.disabledControls[ctr.type]}/>)}
         <button className={classes.OrderButton}
-                disabled={!props.purchasable}>
+                disabled={!props.purchasable}
+                onClick={props.onPurchase}>
                     ORDER NOW
         </button>
     </div>);

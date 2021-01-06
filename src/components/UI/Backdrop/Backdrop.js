@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Backdrop.module.css';
+import propTypes from 'prop-types';
 
 const backdrop = (props) => {
     if (props.show)
@@ -10,6 +11,11 @@ const backdrop = (props) => {
         );
     return null;
     
+};
+
+backdrop.propTypes = {
+    show: propTypes.bool,
+    clicked: propTypes.func
 };
 
 export default backdrop;

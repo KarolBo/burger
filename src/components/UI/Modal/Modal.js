@@ -6,7 +6,8 @@ import MyAux from '../../../hoc/MyAux/MyAux';
 class Modal extends Component {
     // A pure component would check also other properties, such as closing
     shouldComponentUpdate(nextProps, nextState) {
-        return(nextProps.show !== this.props.show);
+        return(nextProps.show !== this.props.show || 
+            (this.props.children && this.props.children.type !== nextProps.children.type));
     }
 
     componentDidUpdate() {

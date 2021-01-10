@@ -8,6 +8,8 @@ class OrderSummary extends Component {
     };
 
     render() {
+        if (!this.props.ingredients) return null;
+        
         const ingredientsSummary = Object.keys(this.props.ingredients).map( key => {
             return (
                 <li key={key}>

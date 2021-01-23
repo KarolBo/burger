@@ -32,34 +32,43 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        this.setState({
-            loading: true
-        });
-        const order = {
-            ingredients: this.state.ingredients,
-            client: {
-                name: 'Karol',
-                address: {
-                    city: 'Adliswil',
-                    street: 'Ruetistrasse',
-                    nummer: 28,
-                    apartment: 4
-                },
-                phone: '0762453801',
-            },
-            price: this.state.totalPrice
-        };
-        axios.post('/orders.json', order)
-        .then(res => {
-            this.setState({
-                loading: false,
-                purchasing: false
-            });
-        })
-        .catch(err => {
-            this.setState({
-                loading: false
-            });
+        // this.setState({
+        //     loading: true
+        // });
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     client: {
+        //         name: 'Karol',
+        //         address: {
+        //             city: 'Adliswil',
+        //             street: 'Ruetistrasse',
+        //             nummer: 28,
+        //             apartment: 4
+        //         },
+        //         phone: '0762453801',
+        //     },
+        //     price: this.state.totalPrice
+        // };
+        // axios.post('/orders.json', order)
+        // .then(res => {
+        //     this.setState({
+        //         loading: false,
+        //         purchasing: false
+        //     });
+        // })
+        // .catch(err => {
+        //     this.setState({
+        //         loading: false
+        //     });
+        // });
+        const queryParams = [];
+        for (let key in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(this.state.ingredients[key]));
+        }
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
         });
     }
 

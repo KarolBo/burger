@@ -4,16 +4,62 @@ import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import { withRouter } from 'react-router-dom';
+import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends React.Component {
   state = {
-    name: '',
-    address: {
-      street: '',
-      postCode: ''
+    orderForm: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Your Name'
+        },
+        value: ''
+      },
+      street: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Street'
+        },
+        value: ''
+      },
+      zipCode: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Your ZIP Code'
+        },
+        value: ''
+      },
+      country: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Country'
+        },
+        value: ''
+      },
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'email',
+          placeholder: 'Your E-Mail'
+        },
+        value: ''
+      },
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+            {value: 'fastest', displayValue: 'Fastest'},
+            {value: 'cheapest', displayValue: 'Cheapest'},
+          ]
+        },
+        value: ''
+      },
     },
-    email: '',
-
     loading: false
   }
 
@@ -49,10 +95,11 @@ class ContactData extends React.Component {
   render(){
     let form = (
       <form action="">
-          <input className={classes.Input} type="text" name="name" placeholder='Your Name'/>
-          <input className={classes.Input} type="text" name="email" placeholder='Your Email'/>
-          <input className={classes.Input} type="text" name="street" placeholder='Your Street'/>
-          <input className={classes.Input} type="text" name="postCode" placeholder='Your Postcode'/>
+          {Object.keys(this.state.orderForm).map( my_input => <Input elementType={this.state.orderForm[my_input].elementType} 
+                                                                     elementConfig={this.state.orderForm[my_input].elementConfig} 
+                                                                     value={this.state.orderForm[my_input].value} 
+                                                                     changed={()=>{}}
+                                                                     key={my_input} /> )}
           <Button onClick={this.orderHandler}
                   btnType='Success'>ORDER</Button>
         </form>

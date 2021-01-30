@@ -1,9 +1,12 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+
 import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
-import { withRouter } from 'react-router-dom';
 import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends React.Component {
@@ -114,30 +117,30 @@ class ContactData extends React.Component {
 
   orderHandler = (event) => {
     event.preventDefault();
-
     this.setState({
             loading: true
         });
-        const orderData = {};
-        for (let key in this.state.orderForm)
-          orderData[key] = this.state.orderForm[key].value;
-        const order = {
-            ingredients: this.props.ingredients,
-            price: this.props.totalPrice,
-            formData: orderData
-        };
-        axios.post('/orders.json', order)
-        .then(res => {
-            this.setState({
-                loading: false
-            });
-            this.props.history.push('/');
-        })
-        .catch(err => {
-            this.setState({
-                loading: false
-            });
+    const orderData = {};
+    for (let key in this.state.orderForm)
+      orderData[key] = this.state.orderForm[key].value;
+    const order = {
+        ingredients: this.props.ingredients,
+        price: this.props.totalPrice,
+        formData: orderData
+    };
+    axios.post('/orders.json', order)
+    .then(res => {
+        this.setState({
+            loading: false
         });
+        this.props.history.push('/');
+    })
+    .catch(err => {
+        console.log(err);
+        this.setState({
+            loading: false
+        });
+    });
   }
 
   inputChangedHandler = (event, inputId) => {
@@ -186,4 +189,12 @@ class ContactData extends React.Component {
     );
   }
 }
-export default withRouter(ContactData);
+
+const mapStateToProps = state => {
+  return {
+      ingredients: state.ingredients,
+      totalPrice: state.totalPrice
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(ContactData));

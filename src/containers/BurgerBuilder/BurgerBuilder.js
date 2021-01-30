@@ -13,7 +13,6 @@ import * as actionTypes from '../../store/actions';
 
 class BurgerBuilder extends Component {
     state = {
-        current_prices: null,
         purchasable: false,
         purchasing: false,
     }
@@ -31,54 +30,12 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        const queryParams = [];
-        for (let key in this.props.ingredients) {
-            queryParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(this.staprops.ingredients[key]));
-        }
-        queryParams.push('price=' + this.props.totalPrice.toFixed(2));
-        const queryString = queryParams.join('&');
-        this.props.history.push({
-            pathname: '/checkout',
-            search: '?' + queryString
-        });
+        this.props.history.push('/checkout');
     }
-
-    // addIngredientHandler = (type) => {
-    //     const updatedIngredients = {
-    //         ...this.state.ingredients
-    //     };
-
-    //     updatedIngredients[type] += 1;
-    //     this.setState({
-    //         ingredients: updatedIngredients,
-    //         totalPrice: this.state.totalPrice + this.state.current_prices[type]
-    //     });
-
-    //     this.updatePurchasable(updatedIngredients);
-    // } 
-
-    // removeIngredientHandler = (type) => {
-    //     const updatedIngredients = {
-    //         ...this.state.ingredients
-    //     };
-
-    //     if (updatedIngredients[type] <= 0)
-    //         return;
-
-    //     updatedIngredients[type] -= 1;
-    //     this.setState({
-    //         ingredients: updatedIngredients,
-    //         totalPrice: this.state.totalPrice - this.state.current_prices[type]
-    //     });
-
-    //     this.updatePurchasable(updatedIngredients);
-    // } 
 
     updatePurchasable(ingredients) {
         const sum = Object.values(ingredients).reduce( (acc, cur) => acc + cur, 0);
-        this.setState( {
-            purchasable: !!sum
-        });
+        return !!sum;
     }
 
     componentDidMount() {
@@ -107,6 +64,8 @@ class BurgerBuilder extends Component {
         for (let key in this.props.ingredients)
             disabledControls[key] = this.props.ingredients[key] <= 0;
 
+        const purchasable = this.updatePurchasable(this.props.ingredients);
+
         let burgerAndControlls = <Spinner />;
         if (this.props.ingredients) 
             burgerAndControlls = <MyAux>
@@ -116,7 +75,7 @@ class BurgerBuilder extends Component {
                                removeHandler={this.props.removeIngredientHandler}
                                disabledControls={disabledControls}
                                price={this.props.totalPrice}
-                               purchasable={this.state.purchasable} 
+                               purchasable={purchasable} 
                                onPurchase={this.purchasingHandler} />
                 </MyAux>
 
@@ -148,7 +107,7 @@ const mapDispatchToProps = dispatch => {
         addIngredientHandler: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, 
                                                      ingredientName: ingName}),
         removeIngredientHandler: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, 
-                                                     ingredientName: ingName}),
+                                                        ingredientName: ingName}),
     };
 };
 

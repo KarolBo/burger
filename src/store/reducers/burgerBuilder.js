@@ -1,17 +1,10 @@
-import * as actionTypes from './actions';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    ingredients: {salad: 0,
-                  bacon: 0,
-                  cheese: 0,
-                  meat: 0},
-    totalPrice: 4,
-    current_prices: {
-        salad: 0.6,
-        bacon: 1,
-        cheese: 0.9,
-        meat: 2
-    }};
+    ingredients: null,
+    totalPrice: 0,
+    current_prices: null
+};
 
 const reducer = (state=initialState, action) => {
     switch(action.type) {
@@ -32,7 +25,23 @@ const reducer = (state=initialState, action) => {
                     [action.ingredientName]: state.ingredients[action.ingredientName] - 1
                 },
                 totalPrice: state.totalPrice - state.current_prices[action.ingredientName]
-            };          
+            };       
+        case actionTypes.FETCH_INGREDIENTS:
+            const ing = action.ingredients.data;
+            let ingredients = {}, prices = {};
+            Object.keys(ing).forEach(ingKey => {
+                if (ingKey !== 'bread') {
+                    ingredients[ingKey] = 0;
+                    prices[ingKey] = ing[ingKey];
+                }
+            });
+
+            return {
+                ...state,
+                ingredients,
+                current_prices: prices,
+                totalPrice: ing.bread,
+            };
         default:
             return state;
     }

@@ -9,7 +9,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import * as actionTypes from '../../store/actions';
+import { addIngredient, removeIngredient, fetchIngredients } from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
     state = {
@@ -34,29 +34,13 @@ class BurgerBuilder extends Component {
     }
 
     updatePurchasable(ingredients) {
+        if (!ingredients) return false;
         const sum = Object.values(ingredients).reduce( (acc, cur) => acc + cur, 0);
         return !!sum;
     }
 
     componentDidMount() {
-        // axios.get('/ingredients.json')
-        // .then(response => {
-        //     const ing = response.data;
-        //     let ingredients = {}, prices = {};
-        //     Object.keys(ing).forEach(ingKey => {
-        //         if (ingKey !== 'bread') {
-        //             ingredients[ingKey] = 0;
-        //             prices[ingKey] = ing[ingKey];
-        //         }
-        //     });
-
-        //     this.setState({
-        //         ingredients,
-        //         current_prices: prices,
-        //         totalPrice: ing.bread
-        //     });
-        // })
-        // .catch(err => {});
+        this.props.fetchIngredients();
     };
 
     render() {
@@ -104,10 +88,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addIngredientHandler: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, 
-                                                     ingredientName: ingName}),
-        removeIngredientHandler: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, 
-                                                        ingredientName: ingName}),
+        addIngredientHandler: (ingName) => dispatch(addIngredient(ingName)),
+        removeIngredientHandler: (ingName) => dispatch(removeIngredient(ingName)),
+        fetchIngredients: () => dispatch(fetchIngredients())
     };
 };
 

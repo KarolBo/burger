@@ -35,6 +35,13 @@ const reducer = (state=initialState, action) => {
                     prices[ingKey] = ing[ingKey];
                 }
             });
+            
+            ingredients = {
+                salad: ingredients.salad,
+                bacon: ingredients.bacon,
+                cheese: ingredients.cheese,
+                meat: ingredients.meat
+            }
 
             return {
                 ...state,

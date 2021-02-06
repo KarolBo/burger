@@ -27,10 +27,39 @@ export const purchaseBurger = orderData => {
         dispatch(purchaseStart());
         axios.post('/orders.json', orderData)
     .then(res => {
-        dispatch(purchaseSuccess(res.data));
+        dispatch(purchaseSuccess(res.data.name));
     })
     .catch(err => {
        dispatch(purchaseFail(err));
     });
     }
 };
+
+export const purcharedReset = () => {
+    return {
+        type: actionTypes.PURCHASED_RESET
+    }
+}
+
+export const fetchingStart = () => {
+    return {
+        type: actionTypes.FETCHING_ORDERS_START
+    }
+}
+
+export const fetchOrders = () => {
+    return async dispatch => {
+        try {
+            dispatch(fetchingStart());
+            const orders = await axios.get('/orders.json');
+            dispatch({
+                type: actionTypes.FETCHING_ORDERS_SUCCESS,
+                orders: Object.values(orders.data)
+            });
+        } catch {
+            return {
+                type: actionTypes.FETCHING_ORDERS_FAIL,
+            }
+        }
+    } 
+}

@@ -8,4 +8,8 @@ export { purchaseFail,
          purcharedReset,
          fetchOrders } from './order';
 
-export { authenticate } from './auth';
+export { authenticate,
+         checkTimeout,
+         authLogout,
+         setPathRedirect,
+         authCheckState } from './auth';

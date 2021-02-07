@@ -9,7 +9,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import { addIngredient, removeIngredient, fetchIngredients, purcharedReset } from '../../store/actions/index';
+import { addIngredient, removeIngredient, fetchIngredients, purcharedReset, setPathRedirect } from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
     state = {
@@ -18,9 +18,14 @@ class BurgerBuilder extends Component {
     }
 
     purchasingHandler = () => {
-        this.setState({
-            purchasing: true
-        });
+        if (this.props.isAuth)
+            this.setState({
+                purchasing: true
+            });
+        else {
+            this.props.onSetRedirectPath('/checkout');
+            this.props.history.push('/auth');
+        }
     }
 
     purchaseCancelHandler = () => {
@@ -61,7 +66,8 @@ class BurgerBuilder extends Component {
                                disabledControls={disabledControls}
                                price={this.props.totalPrice}
                                purchasable={purchasable} 
-                               onPurchase={this.purchasingHandler} />
+                               onPurchase={this.purchasingHandler} 
+                               isAuth={this.props.isAuth} />
                 </MyAux>
 
         let orderSumary = (<OrderSummary ingredients={this.props.ingredients}
@@ -83,7 +89,8 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ingredients: state.burgerBuilder.ingredients,
-        totalPrice: state.burgerBuilder.totalPrice
+        totalPrice: state.burgerBuilder.totalPrice,
+        isAuth: !!state.auth.token
     };
 };
 
@@ -92,7 +99,8 @@ const mapDispatchToProps = dispatch => {
         addIngredientHandler: (ingName) => dispatch(addIngredient(ingName)),
         removeIngredientHandler: (ingName) => dispatch(removeIngredient(ingName)),
         fetchIngredients: () => dispatch(fetchIngredients()),
-        purcharedReset: () => dispatch(purcharedReset())
+        purcharedReset: () => dispatch(purcharedReset()),
+        onSetRedirectPath: (newPath) => dispatch(setPathRedirect(newPath))
     };
 };
 

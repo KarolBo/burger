@@ -11,8 +11,8 @@ class Checkout extends React.Component {
     this.props.history.goBack();
   }
 
-  checkoutContinueddHandler = () => {
-    this.props.history.replace(this.props.match.path + '/contact-data');
+  checkoutContinuedHandler = () => {
+    this.props.history.push(this.props.match.path + '/contact-data');
   }
 
   render () {
@@ -22,7 +22,7 @@ class Checkout extends React.Component {
                     <CheckoutSummary 
                       ingredients={this.props.ingredients}
                       checkoutCancelled={this.checkoutCancelledHandler}
-                      checkoutContinued={this.checkoutContinueddHandler} />
+                      checkoutContinued={this.checkoutContinuedHandler} />
                     <Route path={this.props.match.path + '/contact-data'} >
                       <ContactData/>
                     </Route>

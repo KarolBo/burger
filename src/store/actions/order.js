@@ -47,11 +47,12 @@ export const fetchingStart = () => {
     }
 }
 
-export const fetchOrders = token => {
+export const fetchOrders = (userId, token) => {
     return async dispatch => {
         try {
             dispatch(fetchingStart());
-            const orders = await axios.get('/orders.json?auth=' + token);
+            const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+            const orders = await axios.get('/orders.json' + queryParams);
             dispatch({
                 type: actionTypes.FETCHING_ORDERS_SUCCESS,
                 orders: Object.values(orders.data)

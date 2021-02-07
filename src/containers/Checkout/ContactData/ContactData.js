@@ -124,7 +124,8 @@ class ContactData extends React.Component {
     const order = {
         ingredients: this.props.ingredients,
         price: this.props.totalPrice,
-        formData: orderData
+        formData: orderData,
+        userId: this.props.userId
     };
     
     this.props.onOrderBurger(order, this.props.token);
@@ -181,7 +182,8 @@ const mapStateToProps = state => {
       ingredients: state.burgerBuilder.ingredients,
       totalPrice: state.burgerBuilder.totalPrice,
       loading: state.order.loading,
-      token: state.auth.token
+      token: state.auth.token,
+      userId: state.auth.userId
   };
 };
 

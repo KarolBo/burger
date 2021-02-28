@@ -1,44 +1,43 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './Modal.module.css';
 import Backdrop from '../Backdrop/Backdrop';
 import MyAux from '../../../hoc/MyAux/MyAux';
 
-class Modal extends Component {
-    // A pure component would check also other properties, such as closing
-    shouldComponentUpdate(nextProps, nextState) {
-        return(nextProps.show !== this.props.show || 
-            (this.props.children && this.props.children.type !== nextProps.children.type));
-    }
+const Modal = props => {
 
-    componentDidUpdate() {
-        console.log('[Modal] did update');
-    };
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return(nextProps.show !== props.show || 
+    //         (props.children && props.children.type !== nextProps.children.type));
+    // } --> Memo
  
-    render() {
-        let style;
-        if (this.props.show) {
-            style = {
-                transform: 'TranslateY(0)',
-                opacity: 1
-            };
-        } else {
-            style = {
-                transform: 'TranslateY(-100vh)',
-                opacity: 0
-            };
+    let style;
+    if (props.show) {
+        style = {
+            transform: 'TranslateY(0)',
+            opacity: 1
         };
+    } else {
+        style = {
+            transform: 'TranslateY(-100vh)',
+            opacity: 0
+        };
+    };
 
-        return (
-            <MyAux>
-                <Backdrop show={this.props.show}
-                        clicked={this.props.closing}/>
-                <div className={classes.Modal}
-                    style={style}>
-                    {this.props.children}
-                </div>
-            </MyAux>
-        );
-    }
+    return (
+        <MyAux>
+            <Backdrop show={props.show}
+                    clicked={props.closing}/>
+            <div className={classes.Modal}
+                style={style}>
+                {props.children}
+            </div>
+        </MyAux>
+    );
 };
 
-export default Modal;
+function cmpFun(prevProps, nextProps) {
+        return(nextProps.show !== prevProps.show || 
+            (prevProps.children && prevProps.children.type !== nextProps.children.type));
+    }
+
+export default React.memo(Modal, cmpFun);

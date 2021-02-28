@@ -1,23 +1,19 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const asyncComponent = (importComponent) => {
-    return class extends Component {
-        state = {
-            component: null
-        }
+    return (props) => {
+        const [component, setComponent] = useState(null);
 
-        componentDidMount () {
+        useEffect(() => {
             importComponent()
-                .then(cmp => {
-                    this.setState({component: cmp.default});
-                });
-        }
+            .then(cmp => {
+                setComponent(cmp.default);
+            });
+        });
 
-        render () {
-            const C = this.state.component;
+        const C = component;
 
-            return C ? <C {...this.props} /> : null;
-        }
+        return C ? <C {...props} /> : null;
     }
 }
 
